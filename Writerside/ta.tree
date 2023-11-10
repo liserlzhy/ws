@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="ta"
+                 name="tomcat Api"
+                 start-page="tomcat-api.md">
+
+    <toc-element topic="tomcat-api.md"/>
+    <toc-element topic="one.md"/>
+    <toc-element topic="two.md"/>
+    <toc-element topic="demo.md" id="demo" />
+</instance-profile>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <variables>
+        <color-preset>vivid</color-preset>
+        <primary-color>forest</primary-color>
+    </variables>
+    <footer>
+        <copyright>Company 2000-2023</copyright>
+        <icp>12345</icp>
+        <social type="facebook" href="https://example.com">Product page on Facebook</social>
+        <social type="rss" href="https://example.com">Product RSS feed</social>
+        <social type="email" href="mail@example.com">Send us an email</social>
+        <link href="https://example.com">Custom link 1</link>
+        <link href="https://example.com">Custom link 2</link>
+        <link href="https://example.com">Custom link 3</link>
+    </footer>
+    <build-profile instance="hi">
+        <variables></variables>
+    </build-profile>
+    <build-profile instance="za">
+        <variables></variables>
+    </build-profile>
+    <build-profile instance="ta">
+        <variables>
+            <noindex-content>true</noindex-content>
+        </variables>
+    </build-profile>
+
+</buildprofiles>

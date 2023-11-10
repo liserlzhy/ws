@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="hi"
+                 name="Nong Api"
+                 start-page="newG.md">
+
+    <toc-element topic="newG.md" toc-title="new GGG" accepts-web-file-names-ref="4367d99a"/>
+    <toc-element topic="Default-topic.md">
+        <toc-element topic="Tutorialsdf.md"/>
+    </toc-element>
+    <toc-element topic="one.md"/>
+    <toc-element topic="two.md" hidden="true"/>
+    <include from="ta" element-id="demo"/>
+    <include from="lib" element-id="installation-guide"/>
+</instance-profile>
