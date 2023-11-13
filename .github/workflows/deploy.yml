@@ -73,7 +73,10 @@ jobs:
           args: unzip -qq ${{ env.ARTIFACT }} -d dir
 
       - name: Show Info
-        run: ls
+        run: |
+          ls
+          cd dir
+          ls
 
       - name: Setup Pages
         uses: actions/configure-pages@v2
