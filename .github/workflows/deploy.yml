@@ -24,16 +24,62 @@ jobs:
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
-      - name: Show Info1
-        run: |
-          ls
-          cd artifacts
-          ls
-
       - name: Unzip artifact
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d dist
+          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d docs
 
-      - name: Show Info2
-        run: ls
+      - name: checkout docs
+        run: cd docs
+
+      - name: add dockerignore
+        run: |
+          cat >>.dockerignore <<END
+          .idea
+          .git
+          Dockerfile
+          .dockerignore
+          END
+
+      - name: add Dockerfile
+        run: |
+          cat >>Dockerfile <<END
+          FROM nginx:1.23.1-alpine
+          EXPOSE 80
+          COPY default.conf /etc/nginx/conf.d/
+          COPY . /docs/
+          END
+
+      - name: add default.conf
+        run: |
+          cat >>default.conf <<END
+          server {
+            listen 80;
+            server_name localhost 127.0.0.1;
+            location / {
+              root /docs/;
+            }
+          }
+          END
+
+      - name: Publish to Registry
+        # https://github.com/elgohr/Publish-Docker-Github-Action
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: docs/demo:latest
+#          name: ${{ secrets.DOCKER_REGISTRY }}/njf/open-docs:latest
+#          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+#      - name: executing remote ssh commands using ssh key
+#        uses: appleboy/ssh-action@v1.0.0
+#        with:
+#          host: ${{ secrets.TX_SSH_HOST }}
+#          username: ${{ secrets.TX_SSH_USER }}
+#          key: ${{ secrets.TX_SSH_KEY }}
+#          script: |
+#            cd /home/server/openDocs/
+#            sh docker-compose-runner.sh
+
+          
