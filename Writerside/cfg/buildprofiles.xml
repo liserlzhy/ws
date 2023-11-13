@@ -5,6 +5,9 @@
     <variables>
         <color-preset>vivid</color-preset>
         <primary-color>forest</primary-color>
+        <download-page>https://jb.gg/ipe</download-page>
+        <download-title>IntelliJ Platform Explorer</download-title>
+        <showDownloadButton>true</showDownloadButton>
     </variables>
     <footer>
         <copyright>Company 2000-2023</copyright>

@@ -9,7 +9,6 @@ env:
   INSTANCE: Writerside/hi
   ARTIFACT: webHelpHI2-all.zip
   DOCKER_VERSION: 232.10165.1
-  ALGOLIA_ARTIFACT: algolia-indexes-HI.zip
 
 jobs:
   build:
@@ -32,13 +31,6 @@ jobs:
           path: |
             artifacts/${{ env.ARTIFACT }}
             artifacts/report.json
-            retention-days: 7
-
-      - name: Upload algolia-indexes
-        uses: actions/upload-artifact@v3
-        with:
-          name: algolia-indexes
-          path: artifacts/${{ env.ALGOLIA_ARTIFACT }}
           retention-days: 7
 
   test:
@@ -74,8 +66,12 @@ jobs:
         with:
           args: unzip -qq ${{ env.ARTIFACT }} -d dir
 
+      - name: Show Info
+        run: ls
+        
       - name: Setup Pages
         uses: actions/configure-pages@v2
+
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

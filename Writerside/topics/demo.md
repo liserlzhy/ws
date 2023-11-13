@@ -1,5 +1,5 @@
 # demo
 
-```js
+```Javascript
 console.log('hello world')
 ```
