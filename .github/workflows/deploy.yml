@@ -25,7 +25,10 @@ jobs:
           docker-version: ${{ env.DOCKER_VERSION }}
 
       - name: Show Info After Build
-        run: ls
+        run: |
+          ls
+          cd artifacts
+          ls
 
       - name: Upload documentation
         uses: actions/upload-artifact@v3
