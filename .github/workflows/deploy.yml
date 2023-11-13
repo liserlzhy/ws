@@ -24,13 +24,15 @@ jobs:
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
+      - name: Show Info After Build
+        run: ls
+
       - name: Upload documentation
         uses: actions/upload-artifact@v3
         with:
           name: docs
           path: |
             artifacts/${{ env.ARTIFACT }}
-            artifacts/report.json
           retention-days: 7
 
   test:
@@ -68,7 +70,7 @@ jobs:
 
       - name: Show Info
         run: ls
-        
+
       - name: Setup Pages
         uses: actions/configure-pages@v2
 
