@@ -72,7 +72,7 @@ jobs:
           FROM liserlzhy/nginx-docs:latest
           EXPOSE 80
           COPY default.conf /etc/nginx/conf.d/
-          ADD artifacts/${{ env.ARTIFACT }} /docs/${{ steps.replace.outputs.replaced }}
+          ADD artifacts/${{ env.ARTIFACT }} /docs/${{ steps.replace.outputs.replaced }}/
           COPY ./Writerside/help-versions.json /docs/
           END
 
