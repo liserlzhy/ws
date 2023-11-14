@@ -29,8 +29,14 @@ jobs:
         with:
           args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs
 
+      - name: show pwd
+        run: pwd
+
       - name: copy help-versions.json to docs
-        run: cp ./Writerside/help-versions.json ./docs
+        run: cp ./Writerside/help-versions.json docs/help-versions.json
+
+      - name: show Info
+        run: ls
 
       - name: add dockerignore
         run: |
