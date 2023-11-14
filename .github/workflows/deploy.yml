@@ -59,18 +59,18 @@ jobs:
           .dockerignore
           END
 
-      - name: add nginx conf
-        if: ${{ success() }}
-        run: |
-          cat >>${{ env.DOCS_NAME }}.conf <<END
-          server {
-            listen 80;
-            server_name localhost 127.0.0.1;
-            location /${{ env.DOCS_NAME }} {
-              alias /docs/${{ env.DOCS_NAME }};
-            }
-          }
-          END
+#      - name: add nginx conf
+#        if: ${{ success() }}
+#        run: |
+#          cat >>${{ env.DOCS_NAME }}.conf <<END
+#          server {
+#            listen 80;
+#            server_name localhost 127.0.0.1;
+#            location /${{ env.DOCS_NAME }} {
+#              alias /docs/${{ env.DOCS_NAME }};
+#            }
+#          }
+#          END
 
       - name: add Dockerfile
         if: ${{ success() }}
@@ -83,6 +83,7 @@ jobs:
           COPY ./docs/** $ROOT/$VERSION/
           COPY ./index.html $ROOT/
           WORKDIR $ROOT
+          RUN rm latest
           RUN ln -s $VERSION latest
           END
         env:
