@@ -8,6 +8,7 @@
         <download-page>https://jb.gg/ipe</download-page>
         <download-title>IntelliJ Platform Explorer</download-title>
         <showDownloadButton>true</showDownloadButton>
+        <versions-switcher>http://127.0.0.1:8080/help-versions.json</versions-switcher>
     </variables>
     <footer>
         <copyright>Company 2000-2023</copyright>
