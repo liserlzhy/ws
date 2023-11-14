@@ -59,24 +59,10 @@ jobs:
           .dockerignore
           END
 
-      - name: add Dockerfile
+      - name: add nginx conf
         if: ${{ success() }}
         run: |
-          cat >>Dockerfile <<END
-          FROM liserlzhy/nginx-docs:latest
-          EXPOSE 80
-          COPY default.conf /etc/nginx/conf.d/
-          COPY ./Writerside/help-versions.json /docs/${{ env.DOCS_NAME }}/
-          COPY ./docs/** /docs/${{ steps.replace.outputs.replaced }}/
-          COPY ./index.html /docs/${{ steps.replace.outputs.replaced }}/
-          WORKDIR /docs/${{ steps.replace.outputs.replaced }}/
-          RUN ln -s ${{ steps.replace.outputs.replaced }} latest
-          END
-
-      - name: add default.conf
-        if: ${{ success() }}
-        run: |
-          cat >>default.conf <<END
+          cat >>${{ env.DOCS_NAME }}.conf <<END
           server {
             listen 80;
             server_name localhost 127.0.0.1;
@@ -85,9 +71,23 @@ jobs:
             }
           }
           END
-      - name: show docker config file
-        run: ls
 
+      - name: add Dockerfile
+        if: ${{ success() }}
+        run: |
+          cat >>Dockerfile <<END
+          FROM liserlzhy/nginx-docs:latest
+          EXPOSE 80
+          COPY ${{ env.DOCS_NAME }}.conf /etc/nginx/conf.d/
+          COPY ./Writerside/help-versions.json $ROOT/
+          COPY ./docs/** $ROOT/$VERSION/
+          COPY ./index.html $ROOT/
+          WORKDIR $ROOT
+          RUN ln -s $VERSION latest
+          END
+        env:
+          ROOT: /docs/${{ env.DOCS_NAME }}
+          VERSION: ${{ steps.replace.outputs.replaced }}
 
       - name: Publish to Registry
         if: ${{ success() }}
