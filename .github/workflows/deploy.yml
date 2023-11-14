@@ -11,6 +11,7 @@ env:
   INSTANCE: Writerside/hi
   ARTIFACT: webHelpHI2-all.zip
   DOCKER_VERSION: 232.10165.1
+  DOCS_NAME: open-docs
 
 jobs:
   deploy:
@@ -43,17 +44,10 @@ jobs:
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
-#      - name: Unzip artifact
-#        uses: montudor/action-zip@v1
-#        with:
-#          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs/2.0/
-#
-#      - name: get current version
-#        id: version
-#        run: echo ./docs/current.help.version
-#
-#      - name: show current version
-#        run: echo ${{ steps.version.outputs }}
+      - name: Unzip artifact
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs/
 
       - name: add dockerignore
         if: ${{ success() }}
@@ -72,8 +66,11 @@ jobs:
           FROM liserlzhy/nginx-docs:latest
           EXPOSE 80
           COPY default.conf /etc/nginx/conf.d/
-          ADD artifacts/${{ env.ARTIFACT }} /docs/${{ steps.replace.outputs.replaced }}/
-          COPY ./Writerside/help-versions.json /docs/
+          COPY ./Writerside/help-versions.json /docs/${{ env.DOCS_NAME }}/
+          COPY ./docs/** /docs/${{ steps.replace.outputs.replaced }}/
+          COPY ./index.html /docs/${{ steps.replace.outputs.replaced }}/
+          WORKDIR /docs/${{ steps.replace.outputs.replaced }}/
+          RUN ln -s ${{ steps.replace.outputs.replaced }} latest
           END
 
       - name: add default.conf
@@ -83,8 +80,8 @@ jobs:
           server {
             listen 80;
             server_name localhost 127.0.0.1;
-            location /open-docs {
-              alias /docs;
+            location /${{ env.DOCS_NAME }} {
+              alias /docs/${{ env.DOCS_NAME }};
             }
           }
           END
