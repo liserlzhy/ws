@@ -82,7 +82,7 @@ jobs:
           COPY ./docs/** $ROOT/$VERSION/
           COPY ./index.html $ROOT/
           WORKDIR $ROOT
-          RUN rm latest
+          RUN if [ -f latest ];then rm latest;fi
           RUN ln -s $VERSION latest
           END
         env:
