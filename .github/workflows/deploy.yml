@@ -2,7 +2,9 @@ name: Build documentation
 
 on:
   push:
-    branches: ["main"]
+#    branches: ["*-release"]
+    tags:
+      - "*"
   workflow_dispatch:
 
 env:
@@ -17,26 +19,44 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: get latest tag
+        uses: actions-ecosystem/action-get-latest-tag@v1
+        id: tag_name
+
+      - uses: frabert/replace-string-action@v2
+        if: steps.tag_name.outputs.tag != ''
+        id: replace
+        with:
+          pattern: "(.*)-(.*)"
+          string: "${{ steps.tag_name.outputs.tag }}"
+          replace-with: '$1'
+
+      - name: print tag_name
+        if: ${{ success() }}
+        run: echo tag_name ${{ steps.replace.outputs.replaced }}
+
       - name: Build Writerside
+        if: ${{ success() }}
         uses: JetBrains/writerside-github-action@v4
         with:
           instance: ${{ env.INSTANCE }}
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
-      - name: Unzip artifact
-        uses: montudor/action-zip@v1
-        with:
-          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs
-
-      - name: get current version
-        id: version
-        run: cat
-
-      - name: show current version
-        run: echo ${{ steps.version.outputs }}
+#      - name: Unzip artifact
+#        uses: montudor/action-zip@v1
+#        with:
+#          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs/2.0/
+#
+#      - name: get current version
+#        id: version
+#        run: echo ./docs/current.help.version
+#
+#      - name: show current version
+#        run: echo ${{ steps.version.outputs }}
 
       - name: add dockerignore
+        if: ${{ success() }}
         run: |
           cat >>.dockerignore <<END
           .idea
@@ -46,16 +66,18 @@ jobs:
           END
 
       - name: add Dockerfile
+        if: ${{ success() }}
         run: |
           cat >>Dockerfile <<END
-          FROM nginx:1.23.1-alpine
+          FROM liserlzhy/nginx-docs:latest
           EXPOSE 80
           COPY default.conf /etc/nginx/conf.d/
+          ADD artifacts/${{ env.ARTIFACT }} /docs/${{ steps.replace.outputs.replaced }}
           COPY ./Writerside/help-versions.json /docs/
-          COPY ./docs/** /docs/
           END
 
       - name: add default.conf
+        if: ${{ success() }}
         run: |
           cat >>default.conf <<END
           server {
@@ -71,12 +93,21 @@ jobs:
 
 
       - name: Publish to Registry
+        if: ${{ success() }}
         # https://github.com/elgohr/Publish-Docker-Github-Action
         uses: elgohr/Publish-Docker-Github-Action@v5
         with:
-          name: liserlzhy/demo:latest
+          name: liserlzhy/nginx-docs:latest
 #          name: ${{ secrets.DOCKER_REGISTRY }}/njf/open-docs:latest
 #          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Publish to Registry
+        if: ${{ success() }}
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: liserlzhy/nginx-docs:${{ steps.replace.outputs.replaced }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
