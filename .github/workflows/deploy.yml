@@ -76,6 +76,8 @@ jobs:
             }
           }
           END
+      - name: show docker config file
+        run: ls
 
       - name: Publish to Registry
         # https://github.com/elgohr/Publish-Docker-Github-Action
