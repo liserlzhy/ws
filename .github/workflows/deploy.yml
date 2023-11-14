@@ -28,9 +28,13 @@ jobs:
         uses: montudor/action-zip@v1
         with:
           args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs
-          
-      - name: show Info
-        run: ls
+
+      - name: get current version
+        id: version
+        run: cat
+
+      - name: show current version
+        run: echo ${{ steps.version.outputs }}
 
       - name: add dockerignore
         run: |
@@ -57,8 +61,8 @@ jobs:
           server {
             listen 80;
             server_name localhost 127.0.0.1;
-            location /open-docs/ {
-              root /docs/;
+            location /open-docs {
+              alias /docs;
             }
           }
           END
