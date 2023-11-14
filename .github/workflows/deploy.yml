@@ -78,7 +78,6 @@ jobs:
           cat >>Dockerfile <<END
           FROM liserlzhy/nginx-docs:latest
           EXPOSE 80
-          COPY ${{ env.DOCS_NAME }}.conf /etc/nginx/conf.d/
           COPY ./Writerside/help-versions.json $ROOT/
           COPY ./docs/** $ROOT/$VERSION/
           COPY ./index.html $ROOT/
