@@ -24,6 +24,9 @@ jobs:
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
+      - name: show build Files
+        run: ls
+
       - name: Unzip artifact
         uses: montudor/action-zip@v1
         with:
@@ -31,6 +34,9 @@ jobs:
 
       - name: checkout docs
         run: cd docs
+
+      - name: show docs Files
+        run: ls
 
       - name: add dockerignore
         run: |
