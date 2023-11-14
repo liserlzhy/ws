@@ -24,28 +24,13 @@ jobs:
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
-      - name: show build Files
-        run: ls
-
-      - name: show artifacts
-        run: | 
-          cd artifacts
-          ls
-          cd ../
-
       - name: Unzip artifact
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d docs
+          args: unzip -qq artifacts/${{ env.ARTIFACT }} -d ./docs
 
-      - name: show unzip Files
-        run: ls
-
-      - name: checkout docs
-        run: cd docs
-
-      - name: show docs Files
-        run: ls
+      - name: copy help-versions.json to docs
+        run: cp ./Writerside/help-versions.json ./docs
 
       - name: add dockerignore
         run: |
@@ -62,7 +47,7 @@ jobs:
           FROM nginx:1.23.1-alpine
           EXPOSE 80
           COPY default.conf /etc/nginx/conf.d/
-          COPY . /docs/
+          COPY ./docs/** /docs/
           END
 
       - name: add default.conf
