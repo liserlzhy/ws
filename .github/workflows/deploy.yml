@@ -9,7 +9,7 @@ on:
 
 env:
   INSTANCE: Writerside/hi
-  ARTIFACT: webHelpHI2-all.zip
+  ARTIFACT: webHelpHI2.zip
   DOCKER_VERSION: 232.10165.1
   DOCS_NAME: open-docs
 
@@ -44,6 +44,14 @@ jobs:
           artifact: ${{ env.ARTIFACT }}
           docker-version: ${{ env.DOCKER_VERSION }}
 
+      - name: show info after build
+        run: ls
+
+      - name: see artifacts file list
+        run: |
+          cd artifacts
+          ls
+
       - name: Unzip artifact
         uses: montudor/action-zip@v1
         with:
@@ -58,19 +66,6 @@ jobs:
           Dockerfile
           .dockerignore
           END
-
-#      - name: add nginx conf
-#        if: ${{ success() }}
-#        run: |
-#          cat >>${{ env.DOCS_NAME }}.conf <<END
-#          server {
-#            listen 80;
-#            server_name localhost 127.0.0.1;
-#            location /${{ env.DOCS_NAME }} {
-#              alias /docs/${{ env.DOCS_NAME }};
-#            }
-#          }
-#          END
 
       - name: add Dockerfile
         if: ${{ success() }}

@@ -1,3 +1,7 @@
 .idea/
 *.iml
 *.zip
+.dockerignore
+build.sh
+default.conf
+Dockerfile
